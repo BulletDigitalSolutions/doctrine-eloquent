@@ -2,6 +2,7 @@
 
 namespace BulletDigitalSolutions\DoctrineEloquent\Traits\Entities;
 
+use BulletDigitalSolutions\DoctrineEloquent\Relationships\HasMany;
 use Illuminate\Support\Str;
 
 trait Modelable
@@ -177,5 +178,10 @@ trait Modelable
     {
 //        TODO
         return $this->getRepository()->destroy($this);
+    }
+
+    public function hasMany($relatedEntity, $foreignKey = null, $localKey = null)
+    {
+        return new HasMany($this, $relatedEntity);
     }
 }
