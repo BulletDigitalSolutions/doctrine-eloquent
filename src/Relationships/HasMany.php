@@ -24,13 +24,31 @@ class HasMany
     protected $expressions = [];
 
     /**
+     * @var mixed|null
+     */
+    private $foreignKey;
+
+    /**
+     * @var mixed|null
+     */
+    private $localKey;
+
+    /**
+     * @var mixed|null
+     */
+    private $getter;
+
+    /**
      * @param $parent
      * @param $childEntity
      */
-    public function __construct($parent, $childEntity)
+    public function __construct($parent, $childEntity, $foreignKey = null, $localKey = null, $getter = null)
     {
         $this->parent = $parent;
         $this->childEntity = $childEntity;
+        $this->foreignKey = $foreignKey;
+        $this->localKey = $localKey;
+        $this->getter = $getter;
     }
 
     /**
@@ -51,6 +69,7 @@ class HasMany
      */
     public function orderBy()
     {
+        // TODO: implement
     }
 
     public function getCritera()
@@ -86,10 +105,9 @@ class HasMany
     {
         $related = new $this->childEntity;
 
-        $attributes[$this->getParentIdentifierName()] = $this->getParentIdentifier();
+        $attributes[$this->getLocalKey()] = $this->getParentIdentifier();
 
         $related->fill($attributes);
-        // TODO - Set owner
         $related->save();
 
         return $related;
@@ -100,11 +118,12 @@ class HasMany
      */
     protected function getRelated()
     {
-        // get the filename, remove anything before /
+        if ($this->getter) {
+            return $this->parent->{$this->getter}();
+        }
+
         $array = explode('\\', $this->childEntity);
         $filename = end($array);
-
-        // Pluralise
         $filename = Str::plural($filename);
 
         $function = Str::camel(sprintf('get %s', $filename));
@@ -128,8 +147,12 @@ class HasMany
     /**
      * @return string
      */
-    protected function getParentIdentifierName()
+    protected function getLocalKey()
     {
+        if ($this->localKey) {
+            return $this->localKey;
+        }
+
         $name = $this->getParentEntityName();
 
         return Str::snake(sprintf('%s id', $name));
@@ -140,6 +163,8 @@ class HasMany
      */
     protected function getParentIdentifier()
     {
+
+        // TODO
         return $this->parent->getId();
     }
 }
