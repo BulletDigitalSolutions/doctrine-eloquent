@@ -3,6 +3,7 @@
 namespace BulletDigitalSolutions\DoctrineEloquent\Relationships;
 
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\Query\Expr\OrderBy;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
@@ -22,6 +23,11 @@ class HasMany
      * @var array
      */
     protected $expressions = [];
+
+    /**
+     * @var array
+     */
+    protected $orderBy = [];
 
     /**
      * @var mixed|null
@@ -67,11 +73,18 @@ class HasMany
     /**
      * @return void
      */
-    public function orderBy()
+    public function orderBy($field, $direction = 'asc')
     {
-        // TODO: implement
+        $this->orderBy[] = [
+            'field' => Str::camel($field),
+            'direction' => $direction,
+        ];
+        return $this;
     }
 
+    /**
+     * @return Criteria
+     */
     public function getCritera()
     {
         // for first criteria
@@ -80,6 +93,18 @@ class HasMany
         // for other criteria
         foreach (array_slice($this->expressions, 1) as $expression) {
             $criteria->andWhere($expression);
+        }
+
+        if ($this->orderBy) {
+
+//            $orderBy = new OrderBy;
+//
+//            foreach ($this->orderBy as $order) {
+//                $orderBy->add(Arr::get($order, 'field'), Arr::get($order, 'direction'));
+//            }
+//
+//            TODO: Implement ordering
+//            $criteria->orderBy($this->orderBy);
         }
 
         return $criteria;
@@ -95,6 +120,19 @@ class HasMany
         }
 
         return $this->getRelated()->matching($this->getCritera())->first();
+    }
+
+
+    /**
+     * @return null
+     */
+    public function get()
+    {
+        if (! count($this->expressions) > 0) {
+            return $this->getRelated();
+        }
+
+        return $this->getRelated()->matching($this->getCritera());
     }
 
     /**
