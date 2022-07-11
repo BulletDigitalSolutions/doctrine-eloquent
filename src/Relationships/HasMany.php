@@ -7,7 +7,7 @@ use Doctrine\ORM\Query\Expr\OrderBy;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
-class HasMany
+class HasMany extends BaseRelationship
 {
     /**
      * @var
