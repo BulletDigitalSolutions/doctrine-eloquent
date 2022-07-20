@@ -143,7 +143,11 @@ class HasMany extends BaseRelationship
     {
         $related = new $this->childEntity;
 
-        $attributes[$this->getLocalKey()] = $this->getParentIdentifier();
+//        dd($this->getLocalKey(), $this->getParentIdentifier());
+
+        $attributes[$this->getLocalKey()] = $this->parent;
+
+//        dd($attributes);
 
         $related->fill($attributes);
         $related->save();
