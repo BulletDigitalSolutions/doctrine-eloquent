@@ -180,8 +180,23 @@ trait Modelable
         return $this->getRepository()->destroy($this);
     }
 
+    /**
+     * @param $relatedEntity
+     * @param $foreignKey
+     * @param $localKey
+     * @return HasMany
+     */
     public function hasMany($relatedEntity, $foreignKey = null, $localKey = null)
     {
         return new HasMany($this, $relatedEntity);
+    }
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    static function find($id)
+    {
+        return self::getRepository()->find($id);
     }
 }

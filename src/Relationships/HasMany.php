@@ -62,10 +62,55 @@ class HasMany extends BaseRelationship
      * @param $value
      * @return $this
      */
-    public function where($field, $value)
+    public function where($field, $operator, $value = null)
     {
+        if (is_null($value)) {
+            $value = $operator;
+            $operator = '=';
+        }
+
         $field = Str::camel($field);
-        $this->expressions[] = Criteria::expr()->eq($field, $value);
+
+        switch ($operator) {
+            case '=':
+                $this->expressions[] = Criteria::expr()->eq($field, $value);
+                break;
+            case '!=':
+                $this->expressions[] = Criteria::expr()->neq($field, $value);
+                break;
+            case '>':
+                $this->expressions[] = Criteria::expr()->gt($field, $value);
+                break;
+            case '>=':
+                $this->expressions[] = Criteria::expr()->gte($field, $value);
+                break;
+            case '<':
+                $this->expressions[] = Criteria::expr()->lt($field, $value);
+                break;
+            case '<=':
+                $this->expressions[] = Criteria::expr()->lte($field, $value);
+                break;
+//            case 'like':
+//                $this->expressions[] = Criteria::expr()->like($field, $value);
+//                break;
+//            case 'not like':
+//                $this->expressions[] = Criteria::expr()->notLike($field, $value);
+//                break;
+            case 'in':
+                $this->expressions[] = Criteria::expr()->in($field, $value);
+                break;
+            case 'not in':
+                $this->expressions[] = Criteria::expr()->notIn($field, $value);
+                break;
+            case 'is null':
+                $this->expressions[] = Criteria::expr()->isNull($field);
+                break;
+//            case 'is not null':
+//                $this->expressions[] = Criteria::expr()->isNotNull($field);
+//                break;
+            default:
+                throw new \InvalidArgumentException('Invalid operator');
+        }
 
         return $this;
     }
@@ -143,16 +188,24 @@ class HasMany extends BaseRelationship
     {
         $related = new $this->childEntity;
 
-//        dd($this->getLocalKey(), $this->getParentIdentifier());
-
         $attributes[$this->getLocalKey()] = $this->parent;
-
-//        dd($attributes);
 
         $related->fill($attributes);
         $related->save();
 
         return $related;
+    }
+
+    /**
+     * @return void
+     */
+    public function delete()
+    {
+        $entities = $this->get();
+
+        foreach ($entities as $entity) {
+            $entity->delete();
+        }
     }
 
     /**
@@ -205,8 +258,9 @@ class HasMany extends BaseRelationship
      */
     protected function getParentIdentifier()
     {
-
         // TODO
         return $this->parent->getId();
     }
+
+
 }
