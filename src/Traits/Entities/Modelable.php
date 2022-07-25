@@ -19,6 +19,13 @@ trait Modelable
         if (method_exists($this, $function)) {
             return $this->{$function}();
         }
+
+        if (Str::endsWith($key, '_id')) {
+            $function = Str::camel(sprintf('get %s', Str::replaceLast('_id', '', $key)));
+            if (method_exists($this, $function)) {
+                return $this->{$function}();
+            }
+        }
 //        TODO: Throw error if doesnt exist
     }
 
@@ -33,6 +40,13 @@ trait Modelable
 
         if (method_exists($this, $function)) {
             return $this->{$function}($value);
+        }
+
+        if (Str::endsWith($key, '_id')) {
+            $function = Str::camel(sprintf('set %s', Str::replaceLast('_id', '', $key)));
+            if (method_exists($this, $function)) {
+                return $this->{$function}();
+            }
         }
         //        TODO: Throw error if doesnt exist
     }
@@ -195,8 +209,25 @@ trait Modelable
      * @param $id
      * @return mixed
      */
-    static function find($id)
+    public static function find($id)
     {
         return self::getRepository()->find($id);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function __toString()
+    {
+        // TODO: This should be tidier
+        return $this->getId();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getExists()
+    {
+        return $this->getRepository()->exists($this);
     }
 }
