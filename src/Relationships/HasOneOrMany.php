@@ -129,6 +129,7 @@ class HasOneOrMany extends BaseRelationship
     {
         $field = Str::camel($field);
         $this->expressions[] = Criteria::expr()->notIn($field, $values);
+
         return $this;
     }
 
@@ -185,10 +186,10 @@ class HasOneOrMany extends BaseRelationship
         $entity = $this->getRelated()?->matching($this->getCritera())->first();
 
         if ($entity) {
-            $entity->setExists(true);
+            return $entity;
         }
 
-        return $entity;
+        return null;
     }
 
     /**
@@ -200,7 +201,7 @@ class HasOneOrMany extends BaseRelationship
             return $this->getRelated();
         }
 
-        return $this->getRelated()->matching($this->getCritera());
+        return $this->getRelated()?->matching($this->getCritera());
     }
 
     /**
@@ -259,5 +260,4 @@ class HasOneOrMany extends BaseRelationship
 
         return $entity;
     }
-
 }

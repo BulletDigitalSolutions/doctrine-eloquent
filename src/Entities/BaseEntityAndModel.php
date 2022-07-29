@@ -25,5 +25,4 @@ class EntityAndModel extends Model
     {
         return $this->getRepository()->exists($this);
     }
-
 }

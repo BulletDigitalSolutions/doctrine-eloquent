@@ -2,9 +2,6 @@
 
 namespace BulletDigitalSolutions\DoctrineEloquent\Relationships;
 
-use Doctrine\Common\Collections\Criteria;
-use Doctrine\ORM\Query\Expr\OrderBy;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 class HasMany extends HasOneOrMany
@@ -72,19 +69,15 @@ class HasMany extends HasOneOrMany
 
         $function = Str::camel(sprintf('get %s', $filename));
 
-        dd($function);
-
         if (method_exists($this->parent, $function)) {
-             $entities = $this->parent->{$function}();
+            $entities = $this->parent->{$function}();
 
-             return $entities->map(function ($entity) {
-                 $entity->exists = true;
-                 return $entity;
-             });
+            return $entities->map(function ($entity) {
+                $entity->exists = true;
+
+                return $entity;
+            });
         }
-
-        // TODO: This needs the "exists" flag on the model to be true
-        // TODO: throw error if doesnt exist
     }
 
     /**

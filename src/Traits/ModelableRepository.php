@@ -25,4 +25,17 @@ trait ModelableRepository
     {
         return $this->find($id) !== null;
     }
+
+    /**
+     * @param $ids
+     * @return void
+     */
+    public function destroyIds($ids)
+    {
+        $entities = $this->getManyBy(['id' => $ids]);
+
+        foreach ($entities as $entity) {
+            $this->destroy($ids);
+        }
+    }
 }

@@ -45,7 +45,7 @@ trait Modelable
         if (Str::endsWith($key, '_id')) {
             $function = Str::camel(sprintf('set %s', Str::replaceLast('_id', '', $key)));
             if (method_exists($this, $function)) {
-                return $this->{$function}();
+                return $this->{$function}($value);
             }
         }
         //        TODO: Throw error if doesnt exist
@@ -54,7 +54,7 @@ trait Modelable
     /**
      * @return mixed
      */
-    public function save()
+    public function save(array $options = [])
     {
         return $this->getRepository()->saveChanges($this);
     }
@@ -62,7 +62,7 @@ trait Modelable
     /**
      * @return mixed
      */
-    public function saveOrFail()
+    public function saveOrFail(array $options = [])
     {
         // TODO
         return $this->getRepository()->saveChanges($this);
@@ -161,9 +161,12 @@ trait Modelable
     /**
      * @return mixed
      */
-    public function destroy()
+    public static function destroy($ids)
     {
-        return $this->getRepository()->destroy($this);
+        $repository = new self();
+        $repository = $repository->getRepository();
+
+        return $repository->destroyIds($ids);
     }
 
     /**
@@ -229,5 +232,11 @@ trait Modelable
     public function getExists()
     {
         return $this->getRepository()->exists($this);
+    }
+
+//    TODO
+    public function getForeignKey()
+    {
+        return 'id';
     }
 }
