@@ -81,10 +81,10 @@ trait Modelable
     }
 
     /**
-     * @param $attributes
+     * @param array $attributes
      * @return $this
      */
-    public function fill($attributes)
+    public function fill(array $attributes)
     {
 //        TODO: Protected Properties ?
         foreach ($attributes as $key => $value) {
@@ -98,7 +98,7 @@ trait Modelable
      * @param $attributes
      * @return $this
      */
-    public function forceFill($attributes)
+    public function forceFill(array $attributes)
     {
         foreach ($attributes as $key => $value) {
             $this->{$key} = $value;
