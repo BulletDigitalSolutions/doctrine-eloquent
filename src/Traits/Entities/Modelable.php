@@ -81,7 +81,21 @@ trait Modelable
     }
 
     /**
-     * @param array $attributes
+     * @param  array  $attributes
+     * @return $this
+     */
+    public static function create(array $attributes)
+    {
+        $entity = new self();
+
+        $entity->fill($attributes);
+        $entity->save();
+
+        return $entity;
+    }
+
+    /**
+     * @param  array  $attributes
      * @return $this
      */
     public function fill(array $attributes)
@@ -238,5 +252,19 @@ trait Modelable
     public function getForeignKey()
     {
         return 'id';
+    }
+
+    /**
+     * @return array
+     */
+    public function __toArray()
+    {
+        $array = [];
+
+        foreach ($this as $key => $value) {
+            $array[$key] = $value;
+        }
+
+        return $array;
     }
 }

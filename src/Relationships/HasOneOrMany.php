@@ -239,6 +239,10 @@ class HasOneOrMany extends BaseRelationship
     {
         $entities = $this->get();
 
+        if (!$entities) {
+            return;
+        }
+
         foreach ($entities as $entity) {
             $entity->delete();
         }

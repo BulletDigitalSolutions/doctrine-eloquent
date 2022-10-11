@@ -2,7 +2,6 @@
 
 namespace BulletDigitalSolutions\DoctrineEloquent\Traits\Entities;
 
-use BulletDigitalSolutions\DoctrineEloquent\Relationships\HasMany;
 use Illuminate\Support\Str;
 
 trait EntityAndModel
@@ -55,7 +54,6 @@ trait EntityAndModel
         //        TODO: Throw error if doesnt exist
     }
 
-
     /**
      * @param $attributes
      * @return $this
@@ -93,6 +91,7 @@ trait EntityAndModel
     public function setExists($exists)
     {
         $this->exists = $exists;
+
         return $this;
     }
 
