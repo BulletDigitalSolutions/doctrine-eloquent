@@ -127,6 +127,10 @@ class HasOneOrMany extends BaseRelationship
      */
     public function whereNotIn($field, $values = [])
     {
+        if (is_object($values) && method_exists($values, 'toArray')) {
+            $values = $values->toArray();
+        }
+
         $field = Str::camel($field);
         $this->expressions[] = Criteria::expr()->notIn($field, $values);
 
