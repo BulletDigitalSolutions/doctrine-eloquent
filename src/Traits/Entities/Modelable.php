@@ -237,7 +237,7 @@ trait Modelable
     public function __toString()
     {
         // TODO: This should be tidier
-        return $this->getId();
+        return $this->getId() ?: '';
     }
 
     /**
