@@ -16,17 +16,15 @@
         }
     ],
     "require": {
-        "php": "^7.4|^8.0",
-        "laravel-doctrine/acl": "^1.0",
+        "php": "^8.0",
+        "laravel-doctrine/acl": "^1.0|^1.6",
         "laravel-doctrine/extensions": "^1.0",
         "laravel-doctrine/migrations": "*",
-        "laravel-doctrine/orm": "^1.7",
-        "illuminate/support": "^8.0"
+        "laravel-doctrine/orm": "^1.8",
+        "illuminate/support": "^8.0|^9.0|^10.0|^11.0"
     },
     "require-dev": {
-        "laravel/pint": "^0.2.3",
-        "orchestra/testbench": "^6.0",
-        "phpunit/phpunit": "^9.0"
+        "laravel/pint": "^1.1"
     },
     "autoload": {
         "psr-4": {
