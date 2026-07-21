@@ -7,41 +7,9 @@ use Illuminate\Support\Str;
 class HasMany extends HasOneOrMany
 {
     /**
-     * @var
-     */
-    protected $parent;
-
-    /**
-     * @var
-     */
-    protected $childEntity;
-
-    /**
-     * @var array
-     */
-    protected $expressions = [];
-
-    /**
-     * @var array
-     */
-    protected $orderBy = [];
-
-    /**
-     * @var mixed|null
-     */
-    private $foreignKey;
-
-    /**
-     * @var mixed|null
-     */
-    private $localKey;
-
-    /**
-     * @var mixed|null
-     */
-    private $getter;
-
-    /**
+     * The properties this class needs (parent, childEntity, expressions, orderBy,
+     * foreignKey, localKey, getter) are all declared on HasOneOrMany and inherited.
+     *
      * @param $parent
      * @param $childEntity
      */
@@ -57,7 +25,7 @@ class HasMany extends HasOneOrMany
     /**
      * @return void
      */
-    protected function getRelated()
+    public function getRelated()
     {
         if ($this->getter) {
             return $this->parent->{$this->getter}();

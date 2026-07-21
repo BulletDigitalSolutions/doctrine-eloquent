@@ -2,11 +2,30 @@
 
 namespace BulletDigitalSolutions\DoctrineEloquent\Relationships;
 
+use Closure;
 use Doctrine\Common\Collections\Criteria;
+use Illuminate\Database\Eloquent\Relations\HasMany as EloquentHasMany;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
-class HasOneOrMany extends BaseRelationship
+/**
+ * Extends Eloquent's HasMany purely to satisfy type declarations, not to reuse its
+ * behaviour. Cashier 16 declares Subscription::items() and
+ * ManagesSubscriptions::subscriptions() as returning Illuminate's HasMany, and
+ * doctrine-cashier overrides both to return this class instead. Without a common
+ * ancestor the return types are not covariant and PHP fatals on class load.
+ *
+ * Every method this class actually uses is overridden below, so Eloquent's query
+ * builder is never touched. The parent constructor is deliberately not called: it
+ * expects an Eloquent Builder and Model, which Doctrine cannot supply. Eloquent's
+ * Relation properties are untyped, so they stay null rather than tripping the
+ * uninitialised typed property error.
+ *
+ * Methods Eloquent provides but this class does not override (count(), firstOrFail(),
+ * active()) were already unreachable before this change, since the previous base class
+ * was empty and had no __call. They remain unusable; they now fail differently.
+ */
+class HasOneOrMany extends EloquentHasMany
 {
     /**
      * @var
@@ -31,23 +50,23 @@ class HasOneOrMany extends BaseRelationship
     /**
      * @var mixed|null
      */
-    private $foreignKey;
+    protected $foreignKey;
 
     /**
      * @var mixed|null
      */
-    private $localKey;
+    protected $localKey;
 
     /**
      * @var mixed|null
      */
-    private $getter;
+    protected $getter;
 
     /**
      * @param $attributes
      * @return mixed|null
      */
-    public function firstOrNew($attributes = [])
+    public function firstOrNew(array $attributes = [], Closure|array $values = [])
     {
         foreach ($attributes as $key => $value) {
             $this->where($key, '=', $value);
@@ -199,7 +218,7 @@ class HasOneOrMany extends BaseRelationship
     /**
      * @return null
      */
-    public function get()
+    public function get($columns = ['*'])
     {
         if (! count($this->expressions) > 0) {
             return $this->getRelated();
@@ -227,7 +246,7 @@ class HasOneOrMany extends BaseRelationship
      * @param $attributes
      * @return mixed
      */
-    public function create($attributes)
+    public function create(array $attributes = [])
     {
         $related = $this->new($attributes);
 
@@ -259,7 +278,7 @@ class HasOneOrMany extends BaseRelationship
      * @param  array  $values
      * @return \Illuminate\Database\Eloquent\Model
      */
-    public function updateOrCreate(array $attributes, array $values = [])
+    public function updateOrCreate(array $attributes, Closure|array $values = [])
     {
         $entity = $this->firstOrNew($attributes);
 
