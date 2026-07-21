@@ -17,7 +17,6 @@
     ],
     "require": {
         "php": "^8.0",
-        "laravel-doctrine/acl": "^1.0|^1.6|^2.0",
         "laravel-doctrine/extensions": "^1.0|^2.0",
         "laravel-doctrine/migrations": "*",
         "laravel-doctrine/orm": "^1.8|^2.0|^3.0",
