@@ -2,6 +2,7 @@
 
 namespace BulletDigitalSolutions\DoctrineEloquent\Traits\Entities;
 
+use Doctrine\ORM\Mapping as ORM;
 use Illuminate\Support\Str;
 
 trait EntityAndModel
@@ -71,6 +72,7 @@ trait EntityAndModel
     /**
      * @ORM\PostLoad
      */
+    #[ORM\PostLoad]
     public function postLoad()
     {
         $this->exists = $this->exists();
