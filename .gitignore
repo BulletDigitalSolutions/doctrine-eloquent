@@ -1,3 +1,9 @@
+.phpunit.cache
+composer.lock
+phpunit.xml
+build
+coverage
+testbench.yaml
 vendor
 .idea
 .idea/*
