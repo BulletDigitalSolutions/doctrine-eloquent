@@ -35,7 +35,7 @@ trait ModelableRepository
         $entities = $this->getManyBy(['id' => $ids]);
 
         foreach ($entities as $entity) {
-            $this->destroy($ids);
+            $this->destroy($entity);
         }
     }
 }

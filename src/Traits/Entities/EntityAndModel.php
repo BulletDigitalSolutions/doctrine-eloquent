@@ -38,10 +38,6 @@ trait EntityAndModel
     {
         $function = Str::camel(sprintf('set %s', $key));
 
-        if ($key === 'stripe_id') {
-            dd($value);
-        }
-
         if (method_exists($this, $function)) {
             return $this->{$function}($value);
         }
@@ -49,7 +45,7 @@ trait EntityAndModel
         if (Str::endsWith($key, '_id')) {
             $function = Str::camel(sprintf('set %s', Str::replaceLast('_id', '', $key)));
             if (method_exists($this, $function)) {
-                return $this->{$function}();
+                return $this->{$function}($value);
             }
         }
         //        TODO: Throw error if doesnt exist

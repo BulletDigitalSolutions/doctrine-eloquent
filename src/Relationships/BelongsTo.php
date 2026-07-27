@@ -28,7 +28,21 @@ class BelongsTo extends BaseRelationship
 
     public function __serialize(): array
     {
-        dd('__serialize');
-        // TODO: Implement __serialize() method.
+        return [
+            'query' => $this->query,
+            'child' => $this->child,
+            'foreignKey' => $this->foreignKey,
+            'ownerKey' => $this->ownerKey,
+            'relation' => $this->relation,
+        ];
+    }
+
+    public function __unserialize(array $data): void
+    {
+        $this->query = $data['query'];
+        $this->child = $data['child'];
+        $this->foreignKey = $data['foreignKey'];
+        $this->ownerKey = $data['ownerKey'];
+        $this->relation = $data['relation'];
     }
 }
